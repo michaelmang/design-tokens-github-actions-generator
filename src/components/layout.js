@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
           </Header.Link>
         </Header.Item>
         <Header.Item>
-          <Header.Link as={Link} to="/contribute">
+          <Header.Link href="https://github.com/michaelmang/design-tokens-github-actions-generator" target="_blank" rel="noopener noreferrer">
             Contribute
           </Header.Link>
         </Header.Item>
