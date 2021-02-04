@@ -1,0 +1,251 @@
+import {
+  Box,
+  FormGroup,
+  Heading,
+  Pagehead,
+  StyledOcticon,
+  TextInput,
+  Timeline,
+} from "@primer/components"
+import { FlameIcon } from "@primer/octicons-react"
+import React, { useReducer } from "react"
+import { CopyBlock, anOldHope } from "react-code-blocks"
+import YAML from 'yaml'
+
+import ExternalLink from "../components/external-link"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
+
+const DOCS_BASE = "https://docs.github.com/en/actions/reference/"
+
+const colors = {
+  1: "red",
+  2: "green",
+  3: "purple",
+  4: "blue",
+}
+
+function getDocsLink(value) {
+  const isSlug = value.includes("-")
+  if (isSlug) {
+    return `${DOCS_BASE}${value}`
+  }
+
+  return `${DOCS_BASE}workflow-syntax-for-github-actions#${value}`
+}
+
+function getYAMLFromState(state) {
+  const result = YAML.parse(`
+    name: ${state.name}
+
+    on:
+      push:
+        paths:	
+          ${YAML.stringify(state.paths)}
+
+    jobs:
+      ${state.job}:
+        runs-on: macos-latest
+        steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-node@v2
+          with:
+            node-version: '12'
+        - name: Install Node Dependencies
+          run: npm install
+        - name: Build Style Dictionary
+          run: npm run build
+        - name: Commit Generated Platform Deliverables
+          id: "auto-commit-action"
+          uses: stefanzweifel/git-auto-commit-action@v4
+          with:
+            commit_message: ${state.commitMessage}
+  `)
+  
+  return YAML.stringify(result)
+}
+
+function normalizeEvent(e) {
+  return e.target.value
+}
+
+function normalizePaths(paths) {
+  return paths.split(',').map(path => path.trim());
+}
+
+const initialState = {
+  name: "Transform Design Tokens On Update",
+  paths: ['input/design-tokens.json'],
+  job: "generate_tokens",
+  commitMessage: "Update design tokens",
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "update_name":
+      return { ...state, name: action.name }
+    case "update_paths":
+      return { ...state, paths: action.paths }
+    case "update_job":
+      return { ...state, job: action.job }
+    case "update_commit_message":
+      return { ...state, commitMessage: action.commit_message }
+    default:
+      throw new Error()
+  }
+}
+
+const TransformDesignTokensOnUpdatePage = () => {
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  return (
+    <Layout>
+      <SEO title="Transform Design Tokens On Update" />
+      
+      <Box m={4}>
+        <Pagehead>
+          <Heading fontSize={4}>
+            {initialState.name}
+          </Heading>
+        </Pagehead>
+
+        <Heading fontSize={3} mt={4} mb={2}>
+          Customize Your Workflow
+        </Heading>
+        <FormGroup>
+          <FormGroup.Label htmlFor="name">
+            <ExternalLink href={getDocsLink("name")}>name</ExternalLink>
+          </FormGroup.Label>
+          <p>
+            The name of your workflow.{" "} 
+          </p>
+          <p>
+            <strong>Default:</strong> <code>{initialState.name}</code>
+          </p>
+          <TextInput
+            id="name"
+            onChange={e =>
+              dispatch({ type: "update_name", name: normalizeEvent(e) })
+            }
+            value={state.name}
+            width={500}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <FormGroup.Label htmlFor="paths">
+            <ExternalLink href={getDocsLink("onpushpull_requestpaths")}>push &gt; paths</ExternalLink>
+          </FormGroup.Label>
+          <p>
+            The paths to files relative to the repository root that will trigger the workflow when updated.{' '}
+          </p>
+          <p>
+            <strong>Default:</strong> <code>{initialState.paths.toString()}</code>
+          </p>
+          <p><strong>Example:</strong> <code>input/design-tokens.json, design-tokens/index.json</code></p>
+          <TextInput
+            id="paths"
+            onChange={e =>
+              dispatch({ type: "update_paths", paths: normalizePaths(normalizeEvent(e)) })
+            }
+            value={state.paths}
+            width={500}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <FormGroup.Label htmlFor="job">
+            <ExternalLink href={getDocsLink("jobsjob_idname")}>job</ExternalLink>
+          </FormGroup.Label>
+          <p>
+            The name of the job.{" "}
+          </p>
+          <p>
+            <strong>Default:</strong> <code>{initialState.job}</code>
+          </p>
+          <TextInput
+            id="job"
+            onChange={e =>
+              dispatch({ type: "update_job", job: normalizeEvent(e) })
+            }
+            value={state.job}
+            width={500}
+          />
+        </FormGroup>
+
+        <FormGroup mb={8}>
+          <FormGroup.Label htmlFor="commit_message">
+            commit message
+          </FormGroup.Label>
+          <p>
+            The commit message for the commit containing the platform deliverables generated by <ExternalLink href="https://amzn.github.io/style-dictionary/">Style Dictionary</ExternalLink>.{" "}
+          </p>
+          <p>
+            <strong>Default:</strong> <code>{initialState.commitMessage}</code>
+          </p>
+          <TextInput
+            id="commit_message"
+            onChange={e =>
+              dispatch({ type: "update_commit_message", commit_message: normalizeEvent(e) })
+            }
+            value={state.commitMessage}
+            width={500}
+          />
+        </FormGroup>
+
+        <Heading fontSize={3} mb={2}>
+          Your Generated Workflow
+        </Heading>
+        <Timeline mb={8}>
+          {Object.entries(state).map(([key, step], idx) => {
+            if (!step) {
+              return null
+            }
+
+            return (
+              <Timeline.Item key={key}>
+                <Timeline.Badge bg={`${colors[idx + 1]}.5`}>
+                  <StyledOcticon icon={FlameIcon} color="white" />
+                </Timeline.Badge>
+                {key === "name" && (
+                  <Timeline.Body>
+                    Create a workflow named <strong>{step}</strong>
+                  </Timeline.Body>
+                )}
+                {key === "paths" && (
+                  <Timeline.Body>
+                    Trigger a workflow when any of the following files are updated: <strong>{step}</strong>
+                  </Timeline.Body>
+                )}
+                {key === "job" && (
+                  <Timeline.Body>
+                    Creates a job named <strong>{step}</strong>
+                  </Timeline.Body>
+                )}
+                {key === "commitMessage" && (
+                  <Timeline.Body>
+                    Commits the generated platform deliverables with the following message: <strong>{step}</strong>
+                  </Timeline.Body>
+                )}
+              </Timeline.Item>
+            )
+          })}
+        </Timeline>
+
+        <Heading fontSize={3} mb={2}>
+          Grab Your YAML 
+        </Heading>
+        <CopyBlock
+          codeBlock
+          text={getYAMLFromState(state)}
+          language="yaml"
+          showLineNumbers={false}
+          style={{ padding: '1rem' }}
+          theme={anOldHope}
+        />
+      </Box>
+    </Layout>
+  )
+}
+
+export default TransformDesignTokensOnUpdatePage
