@@ -1,99 +1,61 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+<div align="center">
+<h1>🎨 Design Tokens | Github Actions Generator</h1>
+  
+![style-dictionary](https://pbs.twimg.com/media/EswGlXQXAAA5prH?format=jpg&name=small)
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+<p>Generates a custom YAML file for common GitHub Actions workflows to automate the design token process.</p>
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.com/docs/gatsby-starters/)._
+  
+[Try it yourself](https://design-tokens-github-actions-generator.netlify.app/)
 
-## 🚀 Quick start
+![design-tokens-github-actions-generator](https://user-images.githubusercontent.com/22566333/106957065-8774ac80-6705-11eb-84bf-6a7f78a9ad18.gif)
 
-1.  **Create a Gatsby site.**
+This tool was built using [Gatsby](https://www.gatsbyjs.com/) and [GitHub's Primer components](https://primer.style/components/).
 
-    Use the Gatsby CLI to create a new site, specifying the default starter.
+</div>
 
-    ```shell
-    # create a new Gatsby site using the default starter
-    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
+---
 
-1.  **Start developing.**
+## The motivation
 
-    Navigate into your new site’s directory and start it up.
+I'm a visual person. I'm a UI developer.
 
-    ```shell
-    cd my-default-starter/
-    gatsby develop
-    ```
+When I went through the process of coming up with GitHub Action workflows for [my series on design tokens](https://www.michaelmang.dev/blog/introduction-to-design-tokens), I went googling for a "GitHub Actions generator."
 
-1.  **Open the source code and start editing!**
+I wanted to have a visual tool that I could interact with that would write the commands using [GitHub Actions syntax](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions) to a YAML file.
 
-    Your site is now running at `http://localhost:8000`!
+I wasn't able to find a tool like, so I started to make one for my own.
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.com/tutorial/part-five/#introducing-graphiql)._
+Turns out, it's a lot of work to handle all the syntax. For example, the `on` property can a large combination of [events that trigger the workflow](https://docs.github.com/en/actions/reference/events-that-trigger-workflows).
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+I decided to cut the scope of my initial idea and just create a visual tool that generates the YAML files for [the workflows I created in my design tokens ](https://github.com/michaelmang/style-dictionary/tree/consuming-design-tokens-from-style-dictionary-with-github-actions/.github/workflows).
 
-## 🧐 What's inside?
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [Contributors](#contributors)
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+## Roadmap 🚀
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+### My Roadmap
+- [x] Transform Design Tokens On Update
+- [x] Deliver Design Tokens To Consuming Applications ~ in the works
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+### If People Like the Idea/Wanted to Help Contribute
+- [] Refactor
+- [] Add More Control Over Options (updating the virtual environment, Node versions, etc.)
+- [] Create More Design Tokens Automations Based On Community Input
+- [] Have A Single Page for Doing the Automations
+- [] Expand Automations Beyond Design Tokens
+- [] Allow The User To Create A Workflow W/O An Automation (map forms to the GitHub Actions syntax)
+- [] Allow The User To Select From Pre-Defined Actions In the Marketplace
+- [] Whatever else would be of interest
 
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+## Contributing 💡
+_Looking to contribute?_
 
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
+Feel free to pick up one of the items on the roadmap.
 
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
+## Contributors 😀
+Yours truly.
 
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/gatsby-config/) for more detail).
-
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-
-9.  **`LICENSE`**: This Gatsby starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
-
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
-
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
-
-12. **`README.md`**: A text file containing useful reference information about your project.
-
-## 🎓 Learning Gatsby
-
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.com/). Here are some places to start:
-
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.com/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
-
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.com/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
-
-## 💫 Deploy
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/gatsbyjs/gatsby-starter-default)
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+Contribute to have your name, avatar, and a link added!
